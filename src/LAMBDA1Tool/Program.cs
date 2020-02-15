@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 
 namespace LAMBDA1Tool
 {
@@ -95,8 +94,8 @@ namespace LAMBDA1Tool
             else if (encrypt && !decrypt && key && !createKey)
             {
                 IOHandler.HandleInputIO(positionalArgs, out var input);
-                ReadKey(keywordArgs, out var keyData);
-                ReadInput(input, out var inputData);
+                GetKey(keywordArgs, out var keyData);
+                IOHandler.ReadInput(input, out var inputData);
                 input.Close();
 
                 var encryptionEngine = new CipherFeedbackMode(keyData);
@@ -111,8 +110,8 @@ namespace LAMBDA1Tool
             else if (!encrypt && decrypt && key && !createKey)
             {
                 IOHandler.HandleInputIO(positionalArgs, out var input);
-                ReadKey(keywordArgs, out var keyData);
-                ReadInput(input, out var inputData);
+                GetKey(keywordArgs, out var keyData);
+                IOHandler.ReadInput(input, out var inputData);
                 input.Close();
 
                 var encryptionEngine = new CipherFeedbackMode(keyData);
@@ -128,13 +127,8 @@ namespace LAMBDA1Tool
             {
                 CreateKey(out var keyData);
                 IOHandler.HandleOutputIO(Constants.ProgramMode.CreateKey, positionalArgs, out var output);
-                var encoded_key = Convert.ToBase64String(keyData);
-
-                // This sloppy loop is due to the BinaryWriter I use for both binary output and textual key.
-                // We truncate the more significant byte with the cast to byte. Since the output of base64
-                // should always be an ASCII character this works fine.
-                foreach (var character in encoded_key.ToCharArray())
-                    output.BaseStream.WriteByte((byte)character);
+                var encodedKey = Convert.ToBase64String(keyData);
+                IOHandler.writeEncodedKey(output, encodedKey);
                 output.Close();
             }
 
@@ -143,28 +137,6 @@ namespace LAMBDA1Tool
                 errorAndUtility.CleanErrorExit(ErrorsAndUtility.unknownModeErrMsg, 1, true);
         }
 
-        /// <summary>
-        /// Reads bytes from a BinaryReader. Can handle files as well as streams, but it uses a not-so-nice
-        /// try/catch for it.
-        /// </summary>
-        /// <param name="input">The prepared input handle</param>
-        /// <param name="output">the bytes read from the input handle until EOF is reached</param>
-        private static void ReadInput(BinaryReader input, out byte[] output)
-        {
-            List<byte> buffer = new List<byte>();
-
-            // I know it's not clean to do this by an exception. However I don't know how else to do it,
-            // as a Stream input from the terminal does not know it's end.
-            try
-            {
-                while (true)
-                    buffer.Add(input.ReadByte());
-            } catch (EndOfStreamException)
-            {
-                // do nothing here
-            }
-            output = buffer.ToArray();
-            }
 
         /// <summary>
         /// Processes the key input whiuch is expected to be either a base64 string or a file.
@@ -176,7 +148,7 @@ namespace LAMBDA1Tool
         /// </summary>
         /// <param name="keywordArgs">List of arguments where -k KEY is specified (not checked here)</param>
         /// <param name="key">Returns a valid key as bytes</param>
-        private static void ReadKey(List<(string, string)> keywordArgs, out byte[] key)
+        private static void GetKey(List<(string, string)> keywordArgs, out byte[] key)
         {
             /*
              * In the first part find the -k argument and extract what was specified
@@ -200,15 +172,12 @@ namespace LAMBDA1Tool
              */
             try
             {
-                if (File.Exists(keyArg))
+                if (IOHandler.HandlePossibleKeyFile(keyArg, out var base64Key))
                 {
-                    var rawKey = File.ReadAllText(@keyArg);
-                    rawKey = Regex.Replace(rawKey, @"\t|\n|\r|\s", "");
-                    key = Base64Decode(rawKey);
-                }
-                else
+                    key = Convert.FromBase64String(base64Key);
+                } else
                 {
-                    key = Base64Decode(keyArg);
+                    key = Convert.FromBase64String(keyArg);
                 }
 
                 if (key != null && key.Length != Lambda1.KeySize)
@@ -217,22 +186,14 @@ namespace LAMBDA1Tool
                     errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keySizeErrMsg, Lambda1.KeySize, key.Length), 1, false);
                 }
                     
-            } catch (FormatException)
+            } catch (FormatException e)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
-                errorAndUtility.CleanErrorExit(ErrorsAndUtility.decodeErrMsg, 1, false);
-            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
-            {
-                var errorAndUtility = ErrorsAndUtility.Instance;
-                errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keyInputErrMsg, e.Message), 1, false);
-            }
+                errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.decodeErrMsg, e.Message), 1, false);
+            } 
                 
         }
 
-        private static byte[] Base64Decode(string data)
-        {
-            return Convert.FromBase64String(data);
-        }
 
         /// <summary>
         /// Creates a valid LAMBDA1 key with 32 bytes - uses RNGCryptoServiceProvider

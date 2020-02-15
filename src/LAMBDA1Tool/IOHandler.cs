@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace LAMBDA1Tool
 {
@@ -123,6 +124,83 @@ namespace LAMBDA1Tool
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Reads bytes from a BinaryReader. Can handle files as well as streams, but it uses a not-so-nice
+        /// try/catch for it.
+        /// </summary>
+        /// <param name="input">The prepared input handle</param>
+        /// <param name="output">the bytes read from the input handle until EOF is reached</param>
+        public static void ReadInput(BinaryReader input, out byte[] output)
+        {
+            List<byte> buffer = new List<byte>();
+
+            // I know it's not clean to do this by an exception. However I don't know how else to do it,
+            // as a Stream input from the terminal does not know it's end.
+            try
+            {
+                while (true)
+                    buffer.Add(input.ReadByte());
+            }
+            catch (EndOfStreamException)
+            {
+                // do nothing here
+            }
+            output = buffer.ToArray();
+        }
+
+        /// <summary>
+        /// Check if given string is an existing file or not. If it is, open it and return the content as string.
+        /// Elseweise do nothing and return false.
+        /// </summary>
+        /// <param name="path">A string which can be either a path or something else</param>
+        /// <param name="output">Read bytes from path if it actually is a file</param>
+        /// <returns>
+        /// True when path was a file (output gets set to read bytes), false elsewise (output set to null)
+        /// </returns>
+        public static bool HandlePossibleKeyFile(string path, out string output)
+        {
+            bool fileExists = false;
+            output = null;
+            try
+            {
+                if (File.Exists(path))
+                {
+                    var rawKey = File.ReadAllText(@path);
+                    rawKey = Regex.Replace(rawKey, @"\t|\n|\r|\s", ""); // Replace possible whitespaces or line breaks
+                    output = rawKey;
+                    fileExists = true;
+                }
+            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+            {
+                var errorAndUtility = ErrorsAndUtility.Instance;
+                errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keyInputErrMsg, e.Message), 1, false);
+            }
+
+            return fileExists;
+        }
+
+        /// <summary>
+        /// Write a string to output handler (BinaryWriter)
+        /// </summary>
+        /// <param name="writer">The already open output handler</param>
+        /// <param name="key">A base64 encoded key</param>
+        public static void writeEncodedKey(BinaryWriter writer, string key)
+        {
+            // This sloppy loop is due to the BinaryWriter I use for both binary output and textual key.
+            // We truncate the more significant byte with the cast to byte. Since the output of base64
+            // should always be an ASCII character this works fine.
+            try
+            {
+                foreach (var character in key.ToCharArray())
+                    writer.BaseStream.WriteByte((byte)character);
+            } catch (IOException e)
+            {
+                var errorAndUtility = ErrorsAndUtility.Instance;
+                errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keyWriteErrMsg, e.Message), 1, false);
+            }
+            
         }
     }
 }

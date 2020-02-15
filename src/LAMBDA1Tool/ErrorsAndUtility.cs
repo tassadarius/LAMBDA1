@@ -31,6 +31,7 @@ namespace LAMBDA1Tool
         public static string unknownModeErrMsg = "I do not know what to do (encrypt, decrypt create-key?), please look at the help page.";
         public static string keyInputErrMsg = "Error on reading the key. Opening the file returned:\n\n\"{0}\"";
         public static string keyOutputErrMsg = "Error on writing the key. Opening the file returned:\n\n\"{0}\"";
+        public static string keyWriteErrMsg = "Error on writing the key. Write operation returned:\n\n\"{0}\"";
         public static string inputIOErrMsg = "Error on reading the input. Opening the file returned:\n\n\"{0}\"";
         public static string outputIOErrMsg = "Error on writing the output. Opening the file returned:\n\n\"{0}\"";
         public static string fileNotFoundErrMsg = "Could not find file '{0}'.";
