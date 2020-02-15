@@ -9,10 +9,17 @@ namespace UsageExample
 {
     class Program
     {
-        static string keySizeExit = "The keysize must be {} bytes. However {} bytes were provided.";
-        static string keyArgExit = "An error occured while reading the key. Make sure -k key is specified correctly";
-        static string unknownArgparseExit = "An unknown error occured on parsing the arguments. Did you specify the arguments correctly?";
-        static string unknownArgsExit = "I do not know what to do (encrypt, decrypt create-key?), please look at the help page.";
+        static string keySizeErrMsg = "The keysize must be {0} bytes. However {1} bytes were provided.";
+        static string missingKeyArgErrMsg = "An error occured while reading the key. Make sure -k key is specified correctly";
+        static string unknownArgparseErrMsg = "An unknown error occured on parsing the arguments. Did you specify the arguments correctly?";
+        static string unknownModeErrMsg = "I do not know what to do (encrypt, decrypt create-key?), please look at the help page.";
+        static string decodeErrMsg = "Error on decoding the key.The base64 decoding function returned:\n\n\"{0}\"";
+        static string keyInputErrMsg = "Error on reading the key. Opening the file returned:\n\n\"{0}\"";
+        static string keyOutputErrMsg = "Error on writing the key. Opening the file returned:\n\n\"{0}\"";
+        static string inputIOErrMsg = "Error on reading the input. Opening the file returned:\n\n\"{0}\"";
+        static string outputIOErrMsg = "Error on writing the output. Opening the file returned:\n\n\"{0}\"";
+        static string fileNotFoundErrMsg = "Could not find file {0}";
+        static string invalidArgCountErrMsg = "Invalid number of positional arguments given. Expected none, 1 or 2 arguments, but {0} were provided";
 
         private enum ProgramMode  { Encrypt, Decrypt, CreateKey };
         private static readonly Dictionary<char,(string, string, bool)> options = new Dictionary<char, (string, string, bool)>()
@@ -105,7 +112,7 @@ namespace UsageExample
                         license = true;
                         break;
                     default:
-                        CleanErrorExit(unknownArgparseExit, 1, true);
+                        CleanErrorExit(unknownArgparseErrMsg, 1, true);
                         break;
                 }
             }
@@ -171,7 +178,7 @@ namespace UsageExample
 
             // Unknown combination
             else
-                CleanErrorExit(unknownArgsExit, 1, true);
+                CleanErrorExit(unknownModeErrMsg, 1, true);
         }
 
         private static void ReadInput(BinaryReader input, out byte[] output)
@@ -201,7 +208,7 @@ namespace UsageExample
                     keyArg = arg.Item2; 
             }
             if (keyArg == null)
-                CleanErrorExit(keyArgExit, 1, true);
+                CleanErrorExit(missingKeyArgErrMsg, 1, true);
 
             try
             {
@@ -217,14 +224,14 @@ namespace UsageExample
                 }
 
                 if (key != null && key.Length != Lambda1.KeySize)
-                    CleanErrorExit(string.Format(keySizeExit, Lambda1.KeySize, key.Length), 1, false);
+                    CleanErrorExit(string.Format(keySizeErrMsg, Lambda1.KeySize, key.Length), 1, false);
             } catch (FormatException e)
             {
-                var msg = string.Format("Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\"", e.Message);
+                var msg = string.Format(decodeErrMsg, e.Message);
                 CleanErrorExit(msg, 1, false);
             } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
-                CleanErrorExit(string.Format("Error on reading the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
+                CleanErrorExit(string.Format(keyInputErrMsg, e.Message), 1, false);
             }
                 
         }
@@ -268,16 +275,15 @@ namespace UsageExample
                         input = new BinaryReader(Console.OpenStandardInput());
                         break;
                     default:
-                        CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            " Expected none, 1 or 2 arguments, but {0} were provided", positionalArgs.Count), 1, false);
+                        CleanErrorExit(string.Format(invalidArgCountErrMsg, positionalArgs.Count), 1, false);
                         break;
                 }
-            } catch (FileNotFoundException e)
+            } catch (FileNotFoundException)
             {
-                CleanErrorExit(string.Format("Could not find file {0}", positionalArgs[0]), 1, false);
+                CleanErrorExit(string.Format(fileNotFoundErrMsg, positionalArgs[0]), 1, false);
             } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
-                CleanErrorExit(string.Format("Error on reading the input. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
+                CleanErrorExit(string.Format(inputIOErrMsg, e.Message), 1, false);
             }
         }
 
@@ -297,13 +303,12 @@ namespace UsageExample
                             output = new BinaryWriter(Console.OpenStandardOutput());
                             break;
                         default:
-                            CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            " Expected none or 1 argument, but {0} were provided.", positionalArgs.Count), 1, false);
+                            CleanErrorExit(string.Format(invalidArgCountErrMsg, positionalArgs.Count), 1, false);
                             break;
                     }
                 } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
                 {
-                    CleanErrorExit(string.Format("Error on writing the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
+                    CleanErrorExit(string.Format(keyOutputErrMsg, e.Message), 1, false);
                 }
                 
             }
@@ -323,13 +328,12 @@ namespace UsageExample
                             output = new BinaryWriter(Console.OpenStandardOutput());
                             break;
                         default:
-                            CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            " Expected none, 1 or 2 arguments, but {0} were provided.", positionalArgs.Count), 1, false);
+                            CleanErrorExit(string.Format(invalidArgCountErrMsg, positionalArgs.Count), 1, false);
                             break;
                     }
                 } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
                 {
-                    CleanErrorExit(string.Format("Error on writing the output. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
+                    CleanErrorExit(string.Format(outputIOErrMsg, e.Message), 1, false);
                 }
 
             }
