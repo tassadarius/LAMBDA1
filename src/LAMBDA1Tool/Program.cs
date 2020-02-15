@@ -123,7 +123,7 @@ namespace LAMBDA1Tool
             }
 
             // Create key
-            else if (createKey && !encrypt && !decrypt)
+            else if (createKey && !encrypt && !decrypt && !key)
             {
                 CreateKey(out var keyData);
                 IOHandler.HandleOutputIO(Constants.ProgramMode.CreateKey, positionalArgs, out var output);
@@ -131,6 +131,17 @@ namespace LAMBDA1Tool
                 IOHandler.writeEncodedKey(output, encodedKey);
                 output.Close();
             }
+
+            // Encrypt or Decrypt specified correctly, but no key specified
+            else if ((encrypt && !decrypt ) || (decrypt &&!encrypt) && !key)
+            {
+                var mode = encrypt ? "encrypt" : "decrypt";
+                errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.noKeySpecifiedErrMsg, mode), 1, true);
+            }
+
+            // Create key (--create-key) and load key (--key) specified at same time
+            else if (createKey && key)
+                errorAndUtility.CleanErrorExit(ErrorsAndUtility.keyCreateAndLoadErrMsg, 1, true); 
 
             // Unknown combination (e. g. encrypt and decrypt specified at same time)
             else

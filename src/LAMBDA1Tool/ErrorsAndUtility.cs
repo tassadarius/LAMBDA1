@@ -27,6 +27,8 @@ namespace LAMBDA1Tool
         // The various error strings
         public static string keySizeErrMsg = "The keysize must be {0} bytes. However {1} bytes were provided.";
         public static string missingKeyArgErrMsg = "An error occured while reading the key. Make sure -k key is specified correctly.";
+        public static string noKeySpecifiedErrMsg = "Want to {0} but no key was given with -k KEYARG";
+        public static string keyCreateAndLoadErrMsg = " Create key (--create-key) and load key (--key) specified at same time";
         public static string unknownArgparseErrMsg = "An unknown error occured on parsing the arguments. Did you specify the arguments correctly?";
         public static string unknownModeErrMsg = "I do not know what to do (encrypt, decrypt create-key?), please look at the help page.";
         public static string keyInputErrMsg = "Error on reading the key. Opening the file returned:\n\n\"{0}\"";
