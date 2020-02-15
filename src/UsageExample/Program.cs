@@ -10,16 +10,17 @@ namespace UsageExample
     class Program
     {
         static string keySizeErrMsg = "The keysize must be {0} bytes. However {1} bytes were provided.";
-        static string missingKeyArgErrMsg = "An error occured while reading the key. Make sure -k key is specified correctly";
+        static string missingKeyArgErrMsg = "An error occured while reading the key. Make sure -k key is specified correctly.";
         static string unknownArgparseErrMsg = "An unknown error occured on parsing the arguments. Did you specify the arguments correctly?";
         static string unknownModeErrMsg = "I do not know what to do (encrypt, decrypt create-key?), please look at the help page.";
-        static string decodeErrMsg = "Error on decoding the key.The base64 decoding function returned:\n\n\"{0}\"";
         static string keyInputErrMsg = "Error on reading the key. Opening the file returned:\n\n\"{0}\"";
         static string keyOutputErrMsg = "Error on writing the key. Opening the file returned:\n\n\"{0}\"";
         static string inputIOErrMsg = "Error on reading the input. Opening the file returned:\n\n\"{0}\"";
         static string outputIOErrMsg = "Error on writing the output. Opening the file returned:\n\n\"{0}\"";
-        static string fileNotFoundErrMsg = "Could not find file {0}";
-        static string invalidArgCountErrMsg = "Invalid number of positional arguments given. Expected none, 1 or 2 arguments, but {0} were provided";
+        static string fileNotFoundErrMsg = "Could not find file '{0}'.";
+        static string invalidArgCountErrMsg = "Invalid number of positional arguments given. Expected none, 1 or 2 arguments, but {0} were provided.";
+        static string decodeErrMsg = "Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\".\n" +
+            "Note that this may be the cause of a misspelled filename interpreted as base64.";
 
         private enum ProgramMode  { Encrypt, Decrypt, CreateKey };
         private static readonly Dictionary<char,(string, string, bool)> options = new Dictionary<char, (string, string, bool)>()
