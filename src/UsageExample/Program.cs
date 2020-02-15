@@ -132,9 +132,6 @@ namespace UsageExample
 
                 var encryptionEngine = new CipherFeedbackMode(keyData);
                 encryptionEngine.EncryptData(inputData, out var outputData);
-                encryptionEngine.DecryptData(outputData, out var decryptedData);
-                Console.WriteLine(string.Join(",", inputData));
-                Console.WriteLine(string.Join(",", decryptedData));
                 HandleOutputIO(ProgramMode.Encrypt, positionalArgs, out var output);
                 output.Write(outputData);
                 output.Flush();
@@ -169,35 +166,12 @@ namespace UsageExample
                 // should always be an ASCII character this works fine.
                 foreach (var character in encoded_key.ToCharArray())
                     output.BaseStream.WriteByte((byte)character);
+                output.Close();
             }
 
             // Unknown combination
             else
                 CleanErrorExit(unknownArgsExit, 1, true);
-
-
-            Console.WriteLine("Press Enter to exit");
-            do
-            {
-                while (!Console.KeyAvailable)
-                {
-                    System.Threading.Thread.Sleep(1000);
-                }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
-
-            //foreach (var parsed_element in keywordArgs)
-            //{
-            //    Console.Write("Parse keyword " + parsed_element.Item1);
-            //    Console.WriteLine(parsed_element.Item2 != null ? " " + parsed_element.Item2 : "");
-            //}
-            //foreach (var parsed_element in positionalArgs)
-            //{
-            //    Console.WriteLine("Parse positional argument " + parsed_element);
-            //}
-            //string input = Console.ReadLine();
-
-            //Lambda1 encrpytion_engine = new Lambda1();
-
         }
 
         private static void ReadInput(BinaryReader input, out byte[] output)
@@ -248,7 +222,7 @@ namespace UsageExample
             {
                 var msg = string.Format("Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\"", e.Message);
                 CleanErrorExit(msg, 1, false);
-            } catch (IOException e)
+            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
                 CleanErrorExit(string.Format("Error on reading the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
             }
@@ -264,16 +238,6 @@ namespace UsageExample
             }
                 
             Console.Error.WriteLine(reason);
-
-            Console.WriteLine("Press Enter to exit");
-            do
-            {
-                while (!Console.KeyAvailable)
-                {
-                    System.Threading.Thread.Sleep(1000);
-                }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
-
             Environment.Exit(code);
         }
 
@@ -298,7 +262,7 @@ namespace UsageExample
                 {
                     case 2:
                     case 1:
-                        input = new BinaryReader(new FileStream(positionalArgs[0], FileMode.Open));
+                        input = new BinaryReader(new FileStream(positionalArgs[0], FileMode.Open, FileAccess.Read));
                         break;
                     case 0:
                         input = new BinaryReader(Console.OpenStandardInput());
@@ -311,7 +275,7 @@ namespace UsageExample
             } catch (FileNotFoundException e)
             {
                 CleanErrorExit(string.Format("Could not find file {0}", positionalArgs[0]), 1, false);
-            } catch (IOException e)
+            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
                 CleanErrorExit(string.Format("Error on reading the input. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
             }
@@ -327,17 +291,17 @@ namespace UsageExample
                     switch (positionalArgs.Count)
                     {
                         case 1:
-                            output = new BinaryWriter(new FileStream(positionalArgs[0], FileMode.Create));
+                            output = new BinaryWriter(new FileStream(positionalArgs[0], FileMode.Create, FileAccess.Write));
                             break;
                         case 0:
                             output = new BinaryWriter(Console.OpenStandardOutput());
                             break;
                         default:
                             CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            "Expected 0 to 2 arguemnts, but {0} were provided", positionalArgs.Count), 1, false);
+                            " Expected none or 1 argument, but {0} were provided.", positionalArgs.Count), 1, false);
                             break;
                     }
-                } catch (IOException e)
+                } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
                 {
                     CleanErrorExit(string.Format("Error on writing the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
                 }
@@ -360,10 +324,10 @@ namespace UsageExample
                             break;
                         default:
                             CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            "Expected 0 to 2 arguemnts, but {0} were provided", positionalArgs.Count), 1, false);
+                            " Expected none, 1 or 2 arguments, but {0} were provided.", positionalArgs.Count), 1, false);
                             break;
                     }
-                } catch (IOException e)
+                } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
                 {
                     CleanErrorExit(string.Format("Error on writing the output. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
                 }
