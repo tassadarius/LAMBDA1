@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace UsageExample
+namespace LAMBDA1Tool
 {
     static class IOHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace UsageExample
+﻿namespace LAMBDA1Tool
 {
     static class Constants
     {

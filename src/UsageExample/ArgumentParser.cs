@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UsageExample
+namespace LAMBDA1Tool
 {
     /// <summary>
     /// A quick and dirty hack for argument parsing. Supports positional and keyword arguments.

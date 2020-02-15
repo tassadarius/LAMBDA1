@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UsageExample
+namespace LAMBDA1Tool
 {
     public sealed class ErrorsAndUtility
     {

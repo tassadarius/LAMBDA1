@@ -5,7 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
-namespace UsageExample
+namespace LAMBDA1Tool
 {
     class Program
     {
@@ -188,7 +188,7 @@ namespace UsageExample
                     errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keySizeErrMsg, Lambda1.KeySize, key.Length), 1, false);
                 }
                     
-            } catch (FormatException e)
+            } catch (FormatException)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
                 errorAndUtility.CleanErrorExit(ErrorsAndUtility.decodeErrMsg, 1, false);
