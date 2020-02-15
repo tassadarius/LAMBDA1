@@ -79,8 +79,7 @@ namespace UsageExample
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine(e.Message);
-                CleanErrorExit(e.Message + "\nTry --help for help on usage", 1, false);
+                CleanErrorExit(e.Message, 1, true);
             }
 
             foreach (var argument in keywordArgs)
@@ -129,6 +128,7 @@ namespace UsageExample
                 HandleInputIO(positionalArgs, out var input);
                 ReadKey(keywordArgs, out var keyData);
                 ReadInput(input, out var inputData);
+                input.Close();
 
                 var encryptionEngine = new CipherFeedbackMode(keyData);
                 encryptionEngine.EncryptData(inputData, out var outputData);
@@ -138,30 +138,37 @@ namespace UsageExample
                 HandleOutputIO(ProgramMode.Encrypt, positionalArgs, out var output);
                 output.Write(outputData);
                 output.Flush();
+                output.Close();
             }
 
             // Decrypt
             else if (!encrypt && decrypt && key && !createKey)
             {
-                Console.WriteLine("Decrypting");
                 HandleInputIO(positionalArgs, out var input);
                 ReadKey(keywordArgs, out var keyData);
                 ReadInput(input, out var inputData);
+                input.Close();
 
                 var encryptionEngine = new CipherFeedbackMode(keyData);
                 encryptionEngine.DecryptData(inputData, out var outputData);
                 HandleOutputIO(ProgramMode.Decrypt, positionalArgs, out var output);
                 output.Write(outputData);
                 output.Flush();
+                output.Close();
             }
 
             // Create key
             else if (createKey && !encrypt && !decrypt)
             {
-                Console.WriteLine("create_key");
                 CreateKey(out var keyData);
                 HandleOutputIO(ProgramMode.CreateKey, positionalArgs, out var output);
-                output.Write(Convert.ToBase64String(keyData));
+                var encoded_key = Convert.ToBase64String(keyData);
+
+                // This sloppy loop is due to the BinaryWriter I use for both binary output and textual key.
+                // We truncate the more significant byte with the cast to byte. Since the output of base64
+                // should always be an ASCII character this works fine.
+                foreach (var character in encoded_key.ToCharArray())
+                    output.BaseStream.WriteByte((byte)character);
             }
 
             // Unknown combination
@@ -239,8 +246,11 @@ namespace UsageExample
                     CleanErrorExit(string.Format(keySizeExit, Lambda1.KeySize, key.Length), 1, false);
             } catch (FormatException e)
             {
-                var msg = string.Format("Error on decoding the base64 key. Decoding function returned:\n\n\"{0}\"", e.Message);
+                var msg = string.Format("Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\"", e.Message);
                 CleanErrorExit(msg, 1, false);
+            } catch (IOException e)
+            {
+                CleanErrorExit(string.Format("Error on reading the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
             }
                 
         }
@@ -248,7 +258,11 @@ namespace UsageExample
         private static void CleanErrorExit(string reason, int code, bool printHelp)
         {
             if (printHelp)
+            {
                 PrintHelp();
+                Console.WriteLine();
+            }
+                
             Console.Error.WriteLine(reason);
 
             Console.WriteLine("Press Enter to exit");
@@ -291,12 +305,15 @@ namespace UsageExample
                         break;
                     default:
                         CleanErrorExit(string.Format("Invalid number of positional arguments given." +
-                            "Expected 0 to 2 arguemnts, but {0} were provided", positionalArgs.Count), 1, false);
+                            " Expected none, 1 or 2 arguments, but {0} were provided", positionalArgs.Count), 1, false);
                         break;
                 }
             } catch (FileNotFoundException e)
             {
                 CleanErrorExit(string.Format("Could not find file {0}", positionalArgs[0]), 1, false);
+            } catch (IOException e)
+            {
+                CleanErrorExit(string.Format("Error on reading the input. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
             }
         }
 
@@ -305,34 +322,52 @@ namespace UsageExample
             output = null;
             if (mode == ProgramMode.CreateKey)
             {
-                switch (positionalArgs.Count)
+                try
                 {
-                    case 1:
-                        output = new BinaryWriter(new FileStream(positionalArgs[0], FileMode.Create));
-                        break;
-                    case 0:
-                        output = new BinaryWriter(Console.OpenStandardOutput());
-                        break;
-                    default:
-                        throw new ArgumentException();
+                    switch (positionalArgs.Count)
+                    {
+                        case 1:
+                            output = new BinaryWriter(new FileStream(positionalArgs[0], FileMode.Create));
+                            break;
+                        case 0:
+                            output = new BinaryWriter(Console.OpenStandardOutput());
+                            break;
+                        default:
+                            CleanErrorExit(string.Format("Invalid number of positional arguments given." +
+                            "Expected 0 to 2 arguemnts, but {0} were provided", positionalArgs.Count), 1, false);
+                            break;
+                    }
+                } catch (IOException e)
+                {
+                    CleanErrorExit(string.Format("Error on writing the key. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
                 }
+                
             }
             else if (mode == ProgramMode.Encrypt || mode == ProgramMode.Decrypt)
             {
-                switch (positionalArgs.Count)
+                try
                 {
-                    case 2:
-                        output = new BinaryWriter(new FileStream(positionalArgs[1], FileMode.Create));
-                        break;
-                    case 1:
-                        output = new BinaryWriter(Console.OpenStandardOutput());
-                        break;
-                    case 0:
-                        output = new BinaryWriter(Console.OpenStandardOutput());
-                        break;
-                    default:
-                        throw new ArgumentException();
+                    switch (positionalArgs.Count)
+                    {
+                        case 2:
+                            output = new BinaryWriter(new FileStream(positionalArgs[1], FileMode.Create));
+                            break;
+                        case 1:
+                            output = new BinaryWriter(Console.OpenStandardOutput());
+                            break;
+                        case 0:
+                            output = new BinaryWriter(Console.OpenStandardOutput());
+                            break;
+                        default:
+                            CleanErrorExit(string.Format("Invalid number of positional arguments given." +
+                            "Expected 0 to 2 arguemnts, but {0} were provided", positionalArgs.Count), 1, false);
+                            break;
+                    }
+                } catch (IOException e)
+                {
+                    CleanErrorExit(string.Format("Error on writing the output. Opening the file returned:\n\n\"{0}\"", e.Message), 1, false);
                 }
+
             }
         }
     }
