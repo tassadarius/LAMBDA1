@@ -3,6 +3,14 @@ using System.Collections.Generic;
 
 namespace LAMBDA1Tool
 {
+    /// <summary>
+    /// Handles utility stuff like printing the help and license, as well as error messages and exiting. 
+    /// </summary>
+    /// Important! Do not forget to instantiate the options like this:
+    /// <example> <c>
+    ///     var errorAndUtility = ErrorsAndUtility.Instance;
+    ///     errorAndUtility.options = options;
+    /// </c> </example>
     public sealed class ErrorsAndUtility
     {
 
@@ -13,8 +21,10 @@ namespace LAMBDA1Tool
         // Singleton get Instance function
         public static ErrorsAndUtility Instance { get; } = new ErrorsAndUtility();
 
+        // This option dictionary must be set in order to call printHelp()
         public Dictionary<char, (string, string, bool)> options;
 
+        // The various error strings
         public static string keySizeErrMsg = "The keysize must be {0} bytes. However {1} bytes were provided.";
         public static string missingKeyArgErrMsg = "An error occured while reading the key. Make sure -k key is specified correctly.";
         public static string unknownArgparseErrMsg = "An unknown error occured on parsing the arguments. Did you specify the arguments correctly?";
@@ -28,6 +38,12 @@ namespace LAMBDA1Tool
         public static string decodeErrMsg = "Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\".\n" +
             "Note that this may be the cause of a misspelled filename interpreted as base64.";
 
+        /// <summary>
+        /// Prints an error message and exits with given code. Allows to print the help above the error.
+        /// </summary>
+        /// <param name="reason">The quit message displayed.</param>
+        /// <param name="code">The exit code</param>
+        /// <param name="printHelp">Specifies wether the help will be printed above the quit message</param>
         public void CleanErrorExit(string reason, int code, bool printHelp)
         {
             if (printHelp)
@@ -40,6 +56,10 @@ namespace LAMBDA1Tool
             Environment.Exit(code);
         }
 
+        /// <summary>
+        /// Prints the help message (either by calling -h or when triggered by erros).
+        /// Note that the ErrorsAndUtility.options dictionary must be set.
+        /// </summary>
         public void PrintHelp()
         {
             if (CheckCorrectInstantiation())
@@ -61,6 +81,9 @@ namespace LAMBDA1Tool
             }         
         }
 
+        /// <summary>
+        /// Prints the licensing message as suggested by the FSF
+        /// </summary>
         public void PrintLicense()
         {
             var license = "LAMBDA1 - Encrypts/decrypts data with LAMBDA1 or creates keys\n" +
@@ -81,6 +104,11 @@ namespace LAMBDA1Tool
             Console.WriteLine(license);
         }
 
+        /// <summary>
+        /// Checks if the class has been correctly instantiated before printing the help. I know this is not optimal 
+        /// but this is only a small program. Writes to stderr on mistake.
+        /// </summary>
+        /// <returns>returns true if the class has been correctly initialized and PrintHelp() is safe to call</returns>
         private bool CheckCorrectInstantiation()
         {
             if (options == null)

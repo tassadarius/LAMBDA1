@@ -28,8 +28,9 @@ namespace LAMBDA1Tool
             //  Give it the arguments so it knows what to print in printHelp()
             errorAndUtility.options = options;
 
-            // It seems there is no out-of-the-box command line argument parsing
-            // in C#. I will workaround a little bit.
+            /*
+             * Argument parsing using my badly written custom argument parser
+             */
             bool help = false, key = false, encrypt = false, decrypt = false, createKey = false, license = false;
 
             List<(string,string)> keywordArgs = null;
@@ -44,6 +45,9 @@ namespace LAMBDA1Tool
                 errorAndUtility.CleanErrorExit(e.Message, 1, true);
             }
 
+            /*
+             * Set program modes according to specified args
+             */
             foreach (var argument in keywordArgs)
             {
                 switch (argument.Item1)
@@ -72,6 +76,9 @@ namespace LAMBDA1Tool
                 }
             }
 
+            /*
+             * Execute according to the specified args. 
+             */
             if (help)
             {
                 errorAndUtility.PrintHelp();
@@ -131,11 +138,17 @@ namespace LAMBDA1Tool
                 output.Close();
             }
 
-            // Unknown combination
+            // Unknown combination (e. g. encrypt and decrypt specified at same time)
             else
                 errorAndUtility.CleanErrorExit(ErrorsAndUtility.unknownModeErrMsg, 1, true);
         }
 
+        /// <summary>
+        /// Reads bytes from a BinaryReader. Can handle files as well as streams, but it uses a not-so-nice
+        /// try/catch for it.
+        /// </summary>
+        /// <param name="input">The prepared input handle</param>
+        /// <param name="output">the bytes read from the input handle until EOF is reached</param>
         private static void ReadInput(BinaryReader input, out byte[] output)
         {
             List<byte> buffer = new List<byte>();
@@ -153,8 +166,21 @@ namespace LAMBDA1Tool
             output = buffer.ToArray();
             }
 
+        /// <summary>
+        /// Processes the key input whiuch is expected to be either a base64 string or a file.
+        /// Overview of method: Finds argument --> checks if its a file --> reads from file or directly uses argument.
+        /// The key is expected to base64. That means if the input was recognized as file, it is read and the content
+        /// base64 decoded. If it's not a file, it is directly base64 decoded.
+        /// 
+        /// This function checks the key for validity.
+        /// </summary>
+        /// <param name="keywordArgs">List of arguments where -k KEY is specified (not checked here)</param>
+        /// <param name="key">Returns a valid key as bytes</param>
         private static void ReadKey(List<(string, string)> keywordArgs, out byte[] key)
         {
+            /*
+             * In the first part find the -k argument and extract what was specified
+             */
             string keyArg = null;
             key = null;
             foreach (var arg in keywordArgs)
@@ -168,7 +194,10 @@ namespace LAMBDA1Tool
                 errorAndUtility.CleanErrorExit(ErrorsAndUtility.missingKeyArgErrMsg, 1, true);
             }
                 
-
+            /*
+             * In the second part, check wether the argument specified matches a file or not. If it's a file it reads
+             * and decodes, if it's not a file it directly tries to decode it.
+             */
             try
             {
                 if (File.Exists(keyArg))
@@ -205,6 +234,10 @@ namespace LAMBDA1Tool
             return Convert.FromBase64String(data);
         }
 
+        /// <summary>
+        /// Creates a valid LAMBDA1 key with 32 bytes - uses RNGCryptoServiceProvider
+        /// </summary>
+        /// <param name="key">the output key as bytes</param>
         private static void CreateKey(out byte[] key)
         {
             key = new byte[Lambda1.KeySize];
