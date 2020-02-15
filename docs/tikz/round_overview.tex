@@ -1,0 +1,117 @@
+\documentclass[tikz,convert={density=300, outfile=\jobname.png}]{standalone}
+\usepackage[utf8]{inputenc}		% bei der Verw. von lualatex oder xelatex entfernen!
+\usepackage{tikz}
+
+\usetikzlibrary{calc}
+
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\begin{tikzpicture}
+
+
+
+\tikzset{half paths/.style 2 args={%
+  decoration={show path construction,
+    lineto code={
+      \draw [#1] (\tikzinputsegmentfirst) -- 
+         ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$);
+      \draw [#2] ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$)
+        -- (\tikzinputsegmentlast);
+    }
+  }, decorate
+}}
+
+\tikzset{
+	smallarrow/.style={-{stealth[width=1pt]}}
+}
+
+\tikzset{
+    myarrow/.style={-{stealth}, semithick},
+    myline/.style={semithick},
+    triangle/.style = {draw, regular polygon, regular polygon sides=3, inner sep=0pt, minimum height=130},
+    node rotated/.style = {rotate=180},
+    border rotated/.style = {shape border rotate=180},
+     pre/.style={<-,shorten <=1pt,>=stealth',semithick},
+     post/.style={->,shorten >=1pt,>=stealth',semithick}
+}
+
+\tikzset{XOR/.style={draw,circle,append after command={
+        [shorten >=\pgflinewidth, shorten <=\pgflinewidth, semithick,]
+        (\tikzlastnode.north) edge (\tikzlastnode.south)
+        (\tikzlastnode.east) edge (\tikzlastnode.west)
+        }
+    }
+}
+
+\pgfmathsetmacro{\L}{70}
+\pgfmathsetmacro{\S}{50}
+
+\tikzset{
+	trapez/.style={
+	trapezium, trapezium angle=67.5, draw,inner xsep=0pt,outer sep=0pt,
+	minimum height=25pt, text width=#1
+	}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                       Begin Picture                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Block S
+\node[trapez=\S - 20, shape border rotate=180, align=center] (S) {S};
+\node[above=18pt of S.west, anchor=west] () {\scriptsize 1..};
+\node[above=18pt of S.east, anchor=east] () {\scriptsize ..48};
+
+% Node XOR
+\node[XOR, above=13pt of S.north] (x) {};
+\draw[myarrow] (x) -- (S.north);
+
+% Block Result
+\node[draw, below=20pt of S.south, minimum width=\S] (retval) {\footnotesize output};
+\node[above=6pt of retval.north west, anchor=west] () {\scriptsize 1..};
+\node[above=6pt of retval.north east, anchor=east] () {\scriptsize ..32};
+\draw[myarrow] (S.south) -- (retval.north);
+
+
+%%% Left Branch %%%
+
+% Horizontal anchor for the left branch
+\node[left=\L / 2 + 3pt of x] (anchl) {};
+
+% Block E
+\node[trapez=\S - 20, above=13pt of anchl, align=center] (E) {E};
+\node[below=18pt of E.west, anchor=west] () {\scriptsize 1..};
+\node[below=18pt of E.east, anchor=east] () {\scriptsize ..48};
+\draw[myarrow] (E.south) -- (anchl.center) -- (x.west);
+
+% Block P
+\node[draw, above=13pt of E.north, minimum width=\S pt, minimum height=25pt] (P) {\footnotesize P};
+\draw[myarrow] (P.south) -- (E.north);
+
+% Block R
+\node[draw, above=17pt of P.north, minimum width=\S pt, minimum height=18] (R) {\footnotesize input};
+\node[below=6pt of R.south west, anchor=west] () {\scriptsize 1..};
+\node[below=6pt of R.south east, anchor=east] () {\scriptsize ..32};
+\draw[myarrow] (R.south) -- (P.north);
+
+
+%%% Right Branch %%%
+
+% Horizontal anchor for the right branch
+\node[right=\L / 2 + 3pt of x] (anchr) {};
+
+% Block K (anchor it to the same position as the R block
+\path
+  let \p0 = (anchr),
+      \p1 = (R)
+  in
+node [draw, , minimum width=\L pt, minimum height=18] (K) at (\x0, \y1) {\footnotesize $K_{n}$};
+\node[below=6pt of K.south west, anchor=west] () {\scriptsize 1..};
+\node[below=6pt of K.south east, anchor=east] () {\scriptsize ..48};
+\draw[myarrow] (K.south) -- (anchr.center) -- (x.east);
+
+\end{tikzpicture}
+\end{document}
