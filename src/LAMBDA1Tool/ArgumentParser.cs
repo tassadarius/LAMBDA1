@@ -44,7 +44,7 @@ namespace LAMBDA1Tool
                         result.Add(entry.Key);
                         valid = true;
                     }
-                        
+
                 }
                 if (!valid)
                     throw new ArgumentException("Argument -" + positionalArgument[i] + " not known");
@@ -135,6 +135,6 @@ namespace LAMBDA1Tool
 
             }
         }
-        
+
     }
 }

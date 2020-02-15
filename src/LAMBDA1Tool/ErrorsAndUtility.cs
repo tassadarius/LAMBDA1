@@ -16,7 +16,7 @@ namespace LAMBDA1Tool
 
         // Singleton constructors
         static ErrorsAndUtility() { }
-        private ErrorsAndUtility() {}
+        private ErrorsAndUtility() { }
 
         // Singleton get Instance function
         public static ErrorsAndUtility Instance { get; } = new ErrorsAndUtility();
@@ -38,7 +38,7 @@ namespace LAMBDA1Tool
         public static string outputIOErrMsg = "Error on writing the output. Opening the file returned:\n\n\"{0}\"";
         public static string fileNotFoundErrMsg = "Could not find file '{0}'.";
         public static string invalidArgCountErrMsg = "Invalid number of positional arguments given. Expected none, 1 or 2 arguments, but {0} were provided.";
-        public static string decodeErrMsg = "Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\".\n" +
+        public static string decodeErrMsg = "Error on decoding the key. The base64 decoding function returned:\n\n\"{0}\"\n" +
             "Note that this may be the cause of a misspelled filename interpreted as base64.";
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LAMBDA1Tool
                 output += "\n    -c  --create-key  " + options['c'].Item2;
                 output += "\n    -l  --license     " + options['l'].Item2;
                 Console.WriteLine(output);
-            }         
+            }
         }
 
         /// <summary>
@@ -119,7 +119,8 @@ namespace LAMBDA1Tool
                 Console.Error.WriteLine("PROGRAMMING ERROR. You did not instantiate ErrorsAndUtility.options " +
                     "before calling PrintHelp(). I will skip the printing");
                 return false;
-            } else
+            }
+            else
             {
                 return true;
             }

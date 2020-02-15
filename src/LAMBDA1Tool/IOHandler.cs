@@ -172,7 +172,8 @@ namespace LAMBDA1Tool
                     output = rawKey;
                     fileExists = true;
                 }
-            } catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+            }
+            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
                 errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keyInputErrMsg, e.Message), 1, false);
@@ -195,12 +196,13 @@ namespace LAMBDA1Tool
             {
                 foreach (var character in key.ToCharArray())
                     writer.BaseStream.WriteByte((byte)character);
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
                 errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keyWriteErrMsg, e.Message), 1, false);
             }
-            
+
         }
     }
 }

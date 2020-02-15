@@ -9,7 +9,7 @@ namespace LAMBDA1Tool
     class Program
     {
 
-        private static readonly Dictionary<char,(string, string, bool)> options = new Dictionary<char, (string, string, bool)>()
+        private static readonly Dictionary<char, (string, string, bool)> options = new Dictionary<char, (string, string, bool)>()
         {
             {'h', ("help", "Print this help", false)},
             {'k', ("key", "Provide a KEY as hexadecimal input string or file", true)},
@@ -32,7 +32,7 @@ namespace LAMBDA1Tool
              */
             bool help = false, key = false, encrypt = false, decrypt = false, createKey = false, license = false;
 
-            List<(string,string)> keywordArgs = null;
+            List<(string, string)> keywordArgs = null;
             List<string> positionalArgs = null;
             var parser = new ArgumentParser(options);
             try
@@ -133,7 +133,7 @@ namespace LAMBDA1Tool
             }
 
             // Encrypt or Decrypt specified correctly, but no key specified
-            else if ((encrypt && !decrypt ) || (decrypt &&!encrypt) && !key)
+            else if ((encrypt && !decrypt) || (decrypt && !encrypt) && !key)
             {
                 var mode = encrypt ? "encrypt" : "decrypt";
                 errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.noKeySpecifiedErrMsg, mode), 1, true);
@@ -141,7 +141,7 @@ namespace LAMBDA1Tool
 
             // Create key (--create-key) and load key (--key) specified at same time
             else if (createKey && key)
-                errorAndUtility.CleanErrorExit(ErrorsAndUtility.keyCreateAndLoadErrMsg, 1, true); 
+                errorAndUtility.CleanErrorExit(ErrorsAndUtility.keyCreateAndLoadErrMsg, 1, true);
 
             // Unknown combination (e. g. encrypt and decrypt specified at same time)
             else
@@ -169,14 +169,14 @@ namespace LAMBDA1Tool
             foreach (var arg in keywordArgs)
             {
                 if (arg.Item1.Equals("k"))
-                    keyArg = arg.Item2; 
+                    keyArg = arg.Item2;
             }
             if (keyArg == null)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
                 errorAndUtility.CleanErrorExit(ErrorsAndUtility.missingKeyArgErrMsg, 1, true);
             }
-                
+
             /*
              * In the second part, check wether the argument specified matches a file or not. If it's a file it reads
              * and decodes, if it's not a file it directly tries to decode it.
@@ -186,7 +186,8 @@ namespace LAMBDA1Tool
                 if (IOHandler.HandlePossibleKeyFile(keyArg, out var base64Key))
                 {
                     key = Convert.FromBase64String(base64Key);
-                } else
+                }
+                else
                 {
                     key = Convert.FromBase64String(keyArg);
                 }
@@ -196,13 +197,14 @@ namespace LAMBDA1Tool
                     var errorAndUtility = ErrorsAndUtility.Instance;
                     errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.keySizeErrMsg, Lambda1.KeySize, key.Length), 1, false);
                 }
-                    
-            } catch (FormatException e)
+
+            }
+            catch (FormatException e)
             {
                 var errorAndUtility = ErrorsAndUtility.Instance;
                 errorAndUtility.CleanErrorExit(string.Format(ErrorsAndUtility.decodeErrMsg, e.Message), 1, false);
-            } 
-                
+            }
+
         }
 
 
