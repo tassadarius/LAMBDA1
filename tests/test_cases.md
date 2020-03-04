@@ -88,7 +88,7 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Ciphertext | 589BB0A9 1B7EC441 | |
 
 ## Testcase 5
-    
+
 	Mode:	    Additionsverfahren
     Plain Text: mikroprozessor-technik
     IV:         87878787 87878787
@@ -122,7 +122,7 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Ciphertext | 3EAD09F6 60494C97 | |
 
 ## Testcase 6
-    
+
 	Mode:	    Additionsverfahren
     Plain Text: mikroprozessor-technik
     IV:         87878787 87878787
@@ -156,7 +156,7 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Ciphertext | A6192EC7 82E053AE | |
 
 ## Testcase 7
-    
+
 	Mode:	    Additionsverfahren
     Plain Text: mikroprozessor-technik
     IV:         87878787 87878787
@@ -188,7 +188,7 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Ciphertext | 8B126C1F 338152BF | |
 
 ## Testcase 8
-    
+
 	Mode:	    Additionsverfahren
     Plain Text: mit der megatek 944 (bild unten) stellte cis & bil 
     IV:         87878787 87878787
@@ -501,7 +501,7 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Ciphertext | 8518F748 DC41CFAC | |
 
 ## Testcase 9
-    
+
 	Mode:	    Additionsverfahren
     Plain Text: $%>*R%, 4R)>*
     IV:         87878787 78787878
@@ -525,46 +525,304 @@ Note that the modes do not matter that much. They are there for the sake of comp
 | Encrypted Block | 8016F7CA 2D4F42BA | |
 | Ciphertext | AB16F7CA 2D4F42BA | |
 
-## Testcase 10 (not finished)
-    
+## Testcase 10
+
 	Mode:		Selbstregeneration
 	Plain Text: mit der megatek 944 (bild unten) stellte cis & bil 
     IV:         87878787 87878787
     Key:        01234567 89ABCDEF FEDCBA98 76543210 01234567 89ABCDEF FEDCBA98 76543210
-	
 
 ### Block 1
 
 | Element | Value in hex | Additional Encoding |
 |----|----|----|
 | Plain Text | 70640424 12847016 |  |
-| Encrypted Block | 87d418f0fc28307a | |
-| Ciphertext | f7b01cd4eeac406c | |
+| Encrypted Block | 87D418F0 FC28307A | |
+| Ciphertext | F7B01CD4 EEAC406C | |
 
 ### Block 2
 
 | Element | Value in hex | Additional Encoding |
 |----|----|----|
-| Plain Text | 834013c4e2aa84bd |  |
-| Encrypted Block | e1a6c14193db754a | |
-| Ciphertext | 62e6d2857171f1f7 | |
+| Plain Text | 834013C4 E2AA84BD |  |
+| Encrypted Block | E1A6C141 93DB754A | |
+| Ciphertext | 62E6D285 7171F1F7 | |
 
 ### Block 3
 
-Continue with Block 3 from Page 30 (In-Document 26)
+| Element | Value in hex
+|----|----|
+| Plain Text      | 91922441 CC401332 |
+| Encrypted Block | 13A264BD E0C4D81D |
+| Ciphertext      | 823040FC 2C84CB2F |
 
-## Testcase 11  (not finished)
-    
+### Block 4
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | 10540149 240110E1 |
+| Encrypted Block | D13010DB 4F723575 |
+| Ciphertext      |  |
+
+### Block 5
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | 8511A283 59418F13 |
+| Encrypted Block | 26630AFC EED33505 |
+| Ciphertext      | A372A87F B792BA16 |
+
+### Block 6
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | D1191922 5E04A0CA |
+| Encrypted Block | 8DEA0BFC 1F9CD4B8 |
+| Ciphertext      | 5CF312DE 41987472 |
+
+### Block 7
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | 64404640 731A1031 |
+| Encrypted Block | BD935985 F238345C |
+| Ciphertext      | D9D31FC5 8122246D |
+
+### Block 8
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | CD10904A 10554540 |
+| Encrypted Block | BDF78415 869F8363 |
+| Ciphertext      | 70E7145F 96CAC623 |
+
+### Block 9
+
+| Element | Value in hex
+|----|----|
+| Plain Text      | 1705126E 04046301 |
+| Encrypted Block | 3DF0A983 F28B6896 |
+| Ciphertext      | 2AF5BBED F68F0B97 |
+
+### Block 10                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 10C04704 44D828F1 |
+| Encrypted Block | 0B8826B3 337DA95E |
+| Ciphertext      | 1B4861B7 77A581AF |
+
+### Block 11                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 500D0198 31A04C04 |
+| Encrypted Block | 403C0CD2 6581CB40 |
+| Ciphertext      | 10310D4A 54218744 |
+
+### Block 12                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | A0D01983 0434704A |
+| Encrypted Block | FAADB47A 99C732EA |
+| Ciphertext      | 5A7DADF9 9DF342A0 |
+
+### Block 13                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 10918110 13944110 |
+| Encrypted Block | 8989EFE7 5A2B1646 |
+| Ciphertext      | 99186EF7 49BF5756 |
+
+### Block 14                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 46423146 70748340 |
+| Encrypted Block | 73B6EAFE 63B4436C |
+| Ciphertext      | 35F4DBB8 13C0C02C |
+
+### Block 15                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 660C11E6 0AF04701 |
+| Encrypted Block | 2ABAE206 9ED13C00 |
+| Ciphertext      | 4CB6F3E0 94217B01 |
+
+### Block 16                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 6834013C 41854040 |
+| Encrypted Block | 7B9964A6 B03A3F81 |
+| Ciphertext      | 13AD659A F1BF7FC1 |
+
+### Block 17                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 463041CC 40128C05 |
+| Encrypted Block | 1F4C7B87 6DFCE38A |
+| Ciphertext      | 597C3A4B 2DEE6F8F |
+
+### Block 18                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 47013042 412841CC |
+| Encrypted Block | C3151D26 F30ED174 |
+| Ciphertext      | 84142D64 B22690B8 |
+
+### Block 19                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 19004911 005204e6 |
+| Encrypted Block | C73C8332 C5320018 |
+| Ciphertext      | DE3CCA23 C56004FE |
+
+### Block 20                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 1C107309 11318A24 |
+| Encrypted Block | 095B4194 8E422623 |
+| Ciphertext      | 154B329D 9F73AC07 |
+
+### Block 21                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 47983043 8614405D |
+| Encrypted Block | EEBD5CD0 30C80BF4 |
+| Ciphertext      | A9256C93 B6DC4BA9 |
+
+### Block 22                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 3D21C519 E11E04A4 |
+| Encrypted Block | DD9A829F 023C16C8 |
+| Ciphertext      | E0BB4786 E322126C |
+
+### Block 23                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 0A05004C F0424728 |
+| Encrypted Block | BDABED1E F197EC81 |
+| Ciphertext      | B7AEED52 01D5ABA9 |
+
+### Block 24                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | E5042460 4418C401 |
+| Encrypted Block | 40896EE8 3F236011 |
+| Ciphertext      | A58D4A88 7B3BA410 |
+
+### Block 25                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 68A0D019 83047983 |
+| Encrypted Block | 2C008248 C85D811E |
+| Ciphertext      | 44A05251 4B59F89D |
+
+### Block 26                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 04156051 18149204 |
+| Encrypted Block | 7D7A5234 4722A5AF |
+| Ciphertext      | 796F3265 5F3637AB |
+
+### Block 27                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | C1162984 4114560A |
+| Encrypted Block | 180E25A8 9E8CAF9D |
+| Ciphertext      | D9180C2C DF98F997 |
+
+### Block 28                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 04C11E60 C1130464 |
+| Encrypted Block | 7C5E65DF E128061A |
+| Ciphertext      | 789F7BBF 203B027E |
+
+### Block 29                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 013EC110 05D0C510 |
+| Encrypted Block | 67288E04 A1C6F69A |
+| Ciphertext      | 66164F14 A416338A |
+
+### Block 30                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 630540A1 DC04C405 |
+| Encrypted Block | ED3179DC 483116F5 |
+| Ciphertext      | 8E34397D 9435D2F0 |
+
+### Block 31                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 10730911 C61060A6 |
+| Encrypted Block | 6624CCF3 9150F7AF |
+| Ciphertext      | 7657C5E2 57409709 |
+
+### Block 32                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 120C418C 10118C05 |
+| Encrypted Block | 799E4746 E70C8EBD |
+| Ciphertext      | 6b9206ca f71d02b8 |
+
+### Block 33                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | C1054033 090CA259 |
+| Encrypted Block | EECCB429 DDEC4A7D |
+| Ciphertext      | 2FC9F41A D4E0E824 |
+
+### Block 34                 
+
+| Element | Value in hex     
+|----|----|                  
+| Plain Text      | 1C500000 00000000 |
+| Encrypted Block | FDFD57DC 575F558B |
+| Ciphertext      | E1AD57DC 575F558B |
+
+## Testcase 11
+
 	Mode:		Selbstregeneration
-	Plain Text: mit der megatek 944 (bild unten) stellte cis & bil 
+	Plain Text: $%>*R%,4R)>*
     IV:         87878787 87878787
     Key:        01234567 89ABCDEF FEDCBA98 76543210 01234567 89ABCDEF FEDCBA98 76543210
 
+### Block 1
 
+| Element | Value in hex
+|----|----|
+| Plain Text      | 022A2B2A 2B2A2B2A |
+| Encrypted Block | 00DCEA9C E9C8463D |
+| Ciphertext      | 02F6C1B6 C2E26D17 |
 
+### Block 2                   
 
-	
-	
-
-
-
+| Element | Value in hex      
+|----|----|                   
+| Plain Text      | 2B000000 00000000 |
+| Encrypted Block | C3134563 445B07CB |
+| Ciphertext      | E8134563 445B07CB |
