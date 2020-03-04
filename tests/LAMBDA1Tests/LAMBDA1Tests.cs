@@ -835,7 +835,7 @@ namespace BlockLevelTests
         public void Case9()
         {
             /*
-             * Original Plain Text: "mikroprozessor-technik";
+             * Original Plain Text: "$%>*R%, 4R)>*";
              * Initialization Vector: 87878787 78787878
              *                                 \______/
              *                    careful here, it switches
@@ -881,20 +881,20 @@ namespace BlockLevelTests
     public class Selbstregeneration
     {
 
-        enum TestRuns { Case1, Case2 };
+        enum TestRuns { Case10, Case11 };
         static Dictionary<TestRuns, byte[]> keystore = new Dictionary<TestRuns, byte[]>();
 
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            keystore[TestRuns.Case1] = KeyProvider.key5;
-            keystore[TestRuns.Case2] = KeyProvider.key5;
+            keystore[TestRuns.Case10] = KeyProvider.key5;
+            keystore[TestRuns.Case11] = KeyProvider.key5;
         }
 
 
         [TestMethod]
-        public void Case1()
+        public void Case10()
         {
             /*
              * Original Plain Text: "mit der megatek 944 (bild unten) stellte cis & bil";
@@ -902,7 +902,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case1];
+            key = keystore[TestRuns.Case10];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -1387,17 +1387,17 @@ namespace BlockLevelTests
         }
 
         [TestMethod]
-        public void Case2()
+        public void Case11()
         {
             /*
-             * Original Plain Text: "$%>*R%5R)>";
+             * Original Plain Text: "$%>*R%4R)>";
              * Initialization Vector: 87878787 78787878
              *                                 \______/
              *                    careful here, it switches
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case2];
+            key = keystore[TestRuns.Case11];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
