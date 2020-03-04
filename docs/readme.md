@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/tassadarius/LAMBDA1.svg?branch=master)](https://travis-ci.com/tassadarius/LAMBDA1)
+
 # LAMBDA1 Encryption Algorithm
 
 LAMBDA1 is a block cipher developed in mid to late 1980s in Eastern Germany (German Democratic Republic - GDR).
