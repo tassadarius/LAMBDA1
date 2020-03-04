@@ -11,10 +11,10 @@ namespace LAMBDA1Tool
         private static readonly Dictionary<char, (string, string, bool)> options = new Dictionary<char, (string, string, bool)>()
         {
             {'h', ("help", "Print this help", false)},
-            {'k', ("key", "Provide a KEY as hexadecimal input string or file", true)},
-            {'e', ("encrypt", "Encrypt the input. May read from a file or if not provided stdin. Same goes for output", false)},
-            {'d', ("decrypt", "Decrypt the input. May read from a file or if not provided stdin. Same goes for output", false)},
-            {'c', ("create-key", "Create a key. May not be called with -e or -d", false)},
+            {'k', ("key", "Provide a KEY as base64 encoded string or a file; required for encrypting/decrypting.", true)},
+            {'e', ("encrypt", "Encrypt given message (stdin or INPUT). Output either goes to stdout or OUTPUT.", false)},
+            {'d', ("decrypt", "Decrypt given ciphertext (stdin or INPUT). Output either goes to stdout or OUTPUT", false)},
+            {'c', ("create-key", "Create a key and writes to stdout or file if provided OUTPUT. May not be called with --encrypt or -decrypt.", false)},
             {'l', ("license", "Print license information", false)},
         };
 

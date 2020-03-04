@@ -67,19 +67,20 @@ namespace LAMBDA1Tool
         {
             if (CheckCorrectInstantiation())
             {
-                var output = "LAMBDA1 - Encrypts/decrypts data with LAMBDA1 or creates keys";
-                output += "\n\nSynopsis:    UsageExample [options] [-k KEY] INPUT OUTPUT" +
-                          "\n             UsageExample -c OUTPUT";
-                output += "\n\nDescription:\nLAMBDA1 is a modified version of DES, developed in Eastern Germany in\n" +
-                          "the late 1980s. This program can encrypt/decrypt data as well as create keys.\n" +
-                          "This is an academic implementation which is really slow.";
-                output += "\n\nArguments";
+                var output = "LAMBDA1 - Encrypts/decrypts data with LAMBDA1 or creates keys in base64 encoding\n\n";
+                output += "Synopsis:    LAMBDA1Tool [-ed] [-k KEY] INPUT OUTPUT\n" +
+                          "             LAMBDA1Tool -c OUTPUT\n\n";
+                output += "             INPUT or OUTPUT may be left out. Will then use stdin/stdout instead.\n";
+                output += "Arguments";
                 output += "\n    -h  --help        " + options['h'].Item2;
                 output += "\n    -k  --key KEY     " + options['k'].Item2;
                 output += "\n    -e  --encrypt     " + options['e'].Item2;
                 output += "\n    -d  --decrypt     " + options['d'].Item2;
                 output += "\n    -c  --create-key  " + options['c'].Item2;
                 output += "\n    -l  --license     " + options['l'].Item2;
+                output += "\n\nDescription:\nLAMBDA1 is a modified version of DES, developed in Eastern Germany in\n" +
+                         "the late 1980s. This program can encrypt/decrypt data as well as create keys.\n" +
+                         "This is an academic implementation which is really slow.";
                 Console.WriteLine(output);
             }
         }
