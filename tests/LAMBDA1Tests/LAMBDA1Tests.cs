@@ -10,18 +10,18 @@ namespace BlockLevelTests
     [TestClass]
     public class Tauschverfahren
     {
-        enum TestRuns { Run1, Run2, Run3, Run4, Run5 };
-        static Dictionary<TestRuns, byte[]> keystore = new Dictionary<TestRuns, byte[]>();
+        enum Tests { Case1, Case2, Case3, Case4, Case5 };
+        static Dictionary<Tests, byte[]> keystore = new Dictionary<Tests, byte[]>();
 
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            keystore[TestRuns.Run1] = KeyProvider.key1;
-            keystore[TestRuns.Run2] = KeyProvider.key2;
-            keystore[TestRuns.Run3] = KeyProvider.key3;
-            keystore[TestRuns.Run4] = KeyProvider.key4;
-            keystore[TestRuns.Run5] = KeyProvider.key1;
+            keystore[Tests.Case1] = KeyProvider.key1;
+            keystore[Tests.Case2] = KeyProvider.key2;
+            keystore[Tests.Case3] = KeyProvider.key3;
+            keystore[Tests.Case4] = KeyProvider.key4;
+            keystore[Tests.Case5] = KeyProvider.key1;
 
         }
 
@@ -30,7 +30,7 @@ namespace BlockLevelTests
         public void Case1()
         {
             byte[] key, plainTextBlock, encryptedBlock, expectedBlock, decryptedBlock;
-            key = keystore[TestRuns.Run1];
+            key = keystore[Tests.Case1];
             plainTextBlock = new byte[] { 0x87, 0x87, 0x87, 0x87, 0x78, 0x78, 0x78, 0x78 };
             expectedBlock = new byte[] { 0x66, 0x60, 0x4A, 0x27, 0xFE, 0x8C, 0x05, 0x75 };
 
@@ -48,7 +48,7 @@ namespace BlockLevelTests
         public void Case2()
         {
             byte[] key, plainTextBlock, encryptedBlock, expectedBlock, decryptedBlock;
-            key = keystore[TestRuns.Run2];
+            key = keystore[Tests.Case2];
             plainTextBlock = new byte[] { 0x87, 0x87, 0x87, 0x87, 0x78, 0x78, 0x78, 0x78 };
             expectedBlock = new byte[] { 0xC3, 0x89, 0x22, 0x7B, 0xB0, 0x55, 0xF6, 0xA4 };
 
@@ -65,7 +65,7 @@ namespace BlockLevelTests
         public void Case3()
         {
             byte[] key, plainTextBlock, encryptedBlock, expectedBlock, decryptedBlock;
-            key = keystore[TestRuns.Run3];
+            key = keystore[Tests.Case3];
             plainTextBlock = new byte[] { 0x87, 0x87, 0x87, 0x87, 0x78, 0x78, 0x78, 0x78 };
             expectedBlock = new byte[] { 0x7A, 0x15, 0xF1, 0xCC, 0x6A, 0x59, 0xC2, 0x08 };
 
@@ -85,7 +85,7 @@ namespace BlockLevelTests
              * Original Plain Text: "aller anfang ist sehr schwer doch hinterher ist man schlau";
              */
             byte[] key, plainTextBlock, encryptedBlock, expectedBlock, decryptedBlock;
-            key = keystore[TestRuns.Run4];
+            key = keystore[Tests.Case4];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -156,19 +156,19 @@ namespace BlockLevelTests
     [TestClass]
     public class Additionsverfahren
     {
-        enum TestRuns { Case5, Case6, Case7, Case8, Case9, Case10 };
-        static Dictionary<TestRuns, byte[]> keystore = new Dictionary<TestRuns, byte[]>();
+        enum Tests { Case5, Case6, Case7, Case8, Case9, Case10 };
+        static Dictionary<Tests, byte[]> keystore = new Dictionary<Tests, byte[]>();
 
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
 
-            keystore[TestRuns.Case5] = KeyProvider.key1;
-            keystore[TestRuns.Case6] = KeyProvider.key2;
-            keystore[TestRuns.Case7] = KeyProvider.key3;
-            keystore[TestRuns.Case8] = KeyProvider.key5;
-            keystore[TestRuns.Case9] = KeyProvider.key5;
+            keystore[Tests.Case5] = KeyProvider.key1;
+            keystore[Tests.Case6] = KeyProvider.key2;
+            keystore[Tests.Case7] = KeyProvider.key3;
+            keystore[Tests.Case8] = KeyProvider.key5;
+            keystore[Tests.Case9] = KeyProvider.key5;
         }
 
         [TestMethod]
@@ -180,7 +180,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case5];
+            key = keystore[Tests.Case5];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -238,7 +238,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case6];
+            key = keystore[Tests.Case6];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -294,7 +294,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case7];
+            key = keystore[Tests.Case7];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -350,7 +350,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case8];
+            key = keystore[Tests.Case8];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -842,7 +842,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case9];
+            key = keystore[Tests.Case9];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -881,15 +881,15 @@ namespace BlockLevelTests
     public class Selbstregeneration
     {
 
-        enum TestRuns { Case10, Case11 };
-        static Dictionary<TestRuns, byte[]> keystore = new Dictionary<TestRuns, byte[]>();
+        enum Tests { Case10, Case11 };
+        static Dictionary<Tests, byte[]> keystore = new Dictionary<Tests, byte[]>();
 
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            keystore[TestRuns.Case10] = KeyProvider.key5;
-            keystore[TestRuns.Case11] = KeyProvider.key5;
+            keystore[Tests.Case10] = KeyProvider.key5;
+            keystore[Tests.Case11] = KeyProvider.key5;
         }
 
 
@@ -902,7 +902,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case10];
+            key = keystore[Tests.Case10];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
@@ -1397,7 +1397,7 @@ namespace BlockLevelTests
              */
             byte[] key, plainTextBlock, originalBlock, expectedEncryptedBlock, expectedResultBlock,
                 encryptedBlock, decryptedBlock, resultBlock;
-            key = keystore[TestRuns.Case11];
+            key = keystore[Tests.Case11];
             Lambda1 encryption_engine = new Lambda1(key, OperationMode.Encrypt);
             Lambda1 decryption_engine = new Lambda1(key, OperationMode.Decrypt);
 
