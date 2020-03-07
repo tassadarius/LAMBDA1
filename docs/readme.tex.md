@@ -43,7 +43,7 @@ This software is licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl-3
 
 ## Usage Examples
 
-The program LAMBDA1Tool can be used to create keys and encrypt/decrypt messages:
+The program `LAMBDA1Tool` can be used to create keys and encrypt/decrypt messages:
 
 ```bash
 LAMBDA1Tool --create-key keyfile                        // Creates a key
@@ -52,6 +52,8 @@ LAMBDA1Tool -k keyfile -d ciphertext.bin                // Decrypts the file aga
 ```
 
 It supports input/output files as well as reading/writing to stdout/stdin.
+
+Use `LAMBDA1Tool --help` for more information
 
 # About the Algorithm
 
