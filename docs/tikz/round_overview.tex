@@ -1,5 +1,5 @@
 \documentclass[tikz,convert={density=300, outfile=\jobname.png}]{standalone}
-\usepackage[utf8]{inputenc}		% bei der Verw. von lualatex oder xelatex entfernen!
+\usepackage[utf8]{inputenc}
 \usepackage{tikz}
 
 \usetikzlibrary{calc}
@@ -59,51 +59,53 @@
 %                       Begin Picture                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%middle empty node
+\node[draw, minimum width=\L pt, minimum height=18] (res) {};
+\node[below=6pt of res.south west, anchor=west] () {\scriptsize 1..};
+\node[below=6pt of res.south east, anchor=east] () {\scriptsize ..48};
 
-% Block S
-\node[trapez=\S - 20, shape border rotate=180, align=center] (S) {S};
-\node[above=18pt of S.west, anchor=west] () {\scriptsize 1..};
-\node[above=18pt of S.east, anchor=east] () {\scriptsize ..48};
 
-% Node XOR
-\node[XOR, above=13pt of S.north] (x) {};
-\draw[myarrow] (x) -- (S.north);
+%xor point
+\node[XOR, above=13pt of res.north] (x) {};
+\draw[myarrow] (x) -- (res.north);
 
-% Block Result
-\node[draw, below=20pt of S.south, minimum width=\S] (retval) {\footnotesize output};
-\node[above=6pt of retval.north west, anchor=west] () {\scriptsize 1..};
-\node[above=6pt of retval.north east, anchor=east] () {\scriptsize ..32};
+%S
+\node[trapez=\S - 20, below=20pt of res.south, shape border rotate=180, align=center] (S) {S};
+\draw[myarrow] (res.south) -- (S.north);
+
+%ergebnis
+\node[draw, below=20pt of S.south] (retval) {\footnotesize Ergebnis};
+\node[below=6pt of retval.south west, anchor=west] () {\scriptsize 1..};
+\node[below=6pt of retval.south east, anchor=east] () {\scriptsize ..32};
 \draw[myarrow] (S.south) -- (retval.north);
 
-
-%%% Left Branch %%%
-
-% Horizontal anchor for the left branch
+%left branch
 \node[left=\L / 2 + 3pt of x] (anchl) {};
 
-% Block E
-\node[trapez=\S - 20, above=13pt of anchl, align=center] (E) {E};
-\node[below=18pt of E.west, anchor=west] () {\scriptsize 1..};
-\node[below=18pt of E.east, anchor=east] () {\scriptsize ..48};
-\draw[myarrow] (E.south) -- (anchl.center) -- (x.west);
+%in between empty node
+\node[draw, minimum width=\L pt, minimum height=18, above=13pt of anchl] (leftempty) {};
+\node[below=6pt of leftempty.south west, anchor=west] () {\scriptsize 1..};
+\node[below=6pt of leftempty.south east, anchor=east] () {\scriptsize ..48};
 
-% Block P
+%E
+\node[trapez=\S - 20, above=13pt of leftempty, align=center] (E) {E};
+\draw[myarrow] (leftempty.south) -- (anchl.center) -- (x.west);
+\draw[myarrow] (E.south) -- (leftempty.north);
+
+%P
 \node[draw, above=13pt of E.north, minimum width=\S pt, minimum height=25pt] (P) {\footnotesize P};
+
 \draw[myarrow] (P.south) -- (E.north);
 
-% Block R
-\node[draw, above=17pt of P.north, minimum width=\S pt, minimum height=18] (R) {\footnotesize input};
+\node[draw, above=17pt of P.north, minimum width=\S pt, minimum height=18] (R) {\footnotesize $R$};
 \node[below=6pt of R.south west, anchor=west] () {\scriptsize 1..};
 \node[below=6pt of R.south east, anchor=east] () {\scriptsize ..32};
 \draw[myarrow] (R.south) -- (P.north);
 
 
-%%% Right Branch %%%
-
-% Horizontal anchor for the right branch
+%right branch
 \node[right=\L / 2 + 3pt of x] (anchr) {};
 
-% Block K (anchor it to the same position as the R block
 \path
   let \p0 = (anchr),
       \p1 = (R)
@@ -111,6 +113,7 @@
 node [draw, , minimum width=\L pt, minimum height=18] (K) at (\x0, \y1) {\footnotesize $K_{n}$};
 \node[below=6pt of K.south west, anchor=west] () {\scriptsize 1..};
 \node[below=6pt of K.south east, anchor=east] () {\scriptsize ..48};
+
 \draw[myarrow] (K.south) -- (anchr.center) -- (x.east);
 
 \end{tikzpicture}
