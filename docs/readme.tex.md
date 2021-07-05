@@ -77,8 +77,8 @@ As in DES reverse the order of the round keys for decryption, as well as swap th
 # Round function 
 
 In LAMBDA1 all functions, permutations and S-Boxes are the same as in DES. However, their arrangement differs slightly.
-In a normal round of DES the permutation $P$ is applied in the beginning before the expansion function. In LAMBDA1 it has been
-moved to the end after the S-Boxes.
+In a normal round of DES the permutation $P$ is applied at the end after the S-Boxes.
+In LAMBDA1 it has been moved to the beginning before the expansion function.
 
 A single round is depicted here. $K_n$ is the 48 bit round key:
 
